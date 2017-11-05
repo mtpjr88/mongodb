@@ -1,0 +1,14 @@
+{
+  "name": "nodewithmongo",
+  "version": "1.0.0",
+  "description": "first Mongodb api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Michael Pimentel Jr",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "^2.2.5"
+  }
+}
