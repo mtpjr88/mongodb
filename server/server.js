@@ -13,16 +13,7 @@ app.use(bodyParser.json());
 
 //handles POST requests
 app.post("/todos", (req,res) => {
-    // var todo = new Todo({
-    //     text: req.body.text
-    // });
-
-    // todo.save().then((docs) => {
-    //     res.send(docs);
-    // }, (error) => {
-    //     res.status(400).send(error);
-    // });
-
+    
     var code = new Todo({
         text: req.body.text,
         completed: req.body.completed,
@@ -36,8 +27,17 @@ app.post("/todos", (req,res) => {
     });
 });
 
-
+//Get route returns get requests
+app.get('/todos', (req, res) => {
+    Todo.find().then((todos) => {
+        res.send({todos});
+    },(err) => {
+        res.status(400).send(err);
+    });
+});
 
 app.listen(3000,() => {
     console.log("Started on Port 3000");
 });
+
+module.exports = {app};
