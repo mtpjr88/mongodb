@@ -69,13 +69,26 @@ app.get('/lamps', (req, res) => {
 app.get('/todos/:id', (req, res)=> {
     let id = req.params.id;
 
-    if(!ObjectID.isValid(id)) console.log(`ID not valid`);
+    if(!ObjectID.isValid(id)) return res.status(404).send("Check ID again 'NOT FOUND' ");
 
     Todo.findById(id).then((todo) => {
         res.send({todo});
     }).catch((err) => res.status(404).send(err));
     
 });
+
+app.delete('/todos/:id', (req, res) => {
+    let id = req.params.id;
+    if(!ObjectID.isValid(id)) return res.status(404).send("Check ID again 'NOT FOUND' ");
+    
+    Todo.findByIdAndRemove(id).then((doc) => {
+        if(!doc) return res.status(404).send(); //not found
+
+        res.send(doc);
+
+    }).catch((err) => res.send(err));      
+});
+
 
 
 app.listen(3000,() => {
