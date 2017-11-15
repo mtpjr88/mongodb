@@ -1,4 +1,6 @@
 //(run in terminal to start mongo server) ./mongod --dbpath ~/mongo-data
+require('./config/config.js');
+
 const _ = require("lodash");
 
 const express = require('express');
@@ -15,6 +17,8 @@ var app = express();
 
 //parses data in body to json
 app.use(bodyParser.json());
+//port
+const port = process.env.PORT;
 
 //handles POST requests
 app.post("/todos", (req,res) => {
@@ -109,7 +113,7 @@ app.patch('/todos/:id', (req, res) => {
     }).catch((err) => res.status(400).send());
 });
 
-app.listen(3000,() => {
+app.listen(port,() => {
     console.log("Started on Port 3000");
 });
 
