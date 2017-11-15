@@ -1,8 +1,9 @@
 //(run in terminal to start mongo server) ./mongod --dbpath ~/mongo-data
+const _ = require("lodash");
 
-var express = require('express');
-var bodyParser = require('body-parser');
-var { ObjectID } = require('mongodb');
+const express = require('express');
+const bodyParser = require('body-parser');
+const { ObjectID } = require('mongodb');
 
 
 var { mongoose } = require('./db/mongoose');
@@ -89,7 +90,24 @@ app.delete('/todos/:id', (req, res) => {
     }).catch((err) => res.send(err));      
 });
 
+//update items
+app.patch('/todos/:id', (req, res) => {
+    let id = req.params.id;
+    let body = _.pick(req.body, ['text', 'completed']);
+    if(!ObjectID.isValid(id)) return res.status(404).send("Check ID again 'NOT FOUND'");
 
+    if(_.isBoolean(body.completed) && body.completed) {
+         body.completedAt = new Date().getTime();
+    } else {
+        body.completed = false;
+        body.comletedAt = null;
+    }
+
+    Todo.findByIdAndUpdate(id, {$set: body}, {new: true}).then((doc) => {
+        if(!doc) return res.status(404).send("Not found");
+        res.status(200).send({doc});
+    }).catch((err) => res.status(400).send());
+});
 
 app.listen(3000,() => {
     console.log("Started on Port 3000");
